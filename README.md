@@ -1,5 +1,5 @@
 # Sliding Puzzle
-Version 1.0.0
+Version 1.0.1
 
 Simple sliding puzzle game made using JavaFX.
 
