@@ -8,11 +8,10 @@ import java.util.ArrayList;
 public class Tile extends Pane {
 
     private Background originalBackground;
-    private Image image;
     private Boolean isBlank = false;
-    int x, y;
+    private int x, y;
 
-    public Tile(Image image, Boolean isBlank, int x, int y){
+    Tile(Image image, Boolean isBlank, int x, int y){
 
         this.x = x;
         this.y = y;
@@ -21,24 +20,20 @@ public class Tile extends Pane {
         this.isBlank = isBlank;
 
         if(!isBlank){
-            this.image = image;
             BackgroundImage backImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-            Background background = new Background(backImage);
-            originalBackground = background;
+            originalBackground = new Background(backImage);
             this.setBackground(new Background(backImage));
         }
         else{
             BackgroundFill backgroundFill = new BackgroundFill(Color.WHITE,
                     CornerRadii.EMPTY, Insets.EMPTY);
-            Background background = new Background(backgroundFill);
-            originalBackground = background;
-            this.setBackground(background);
+            originalBackground = new Background(backgroundFill);
         }
 
         this.setOnMouseClicked(event -> clicked(false));
     }
 
-    public void clicked(Boolean ai){
+    void clicked(Boolean ai){
         if(!isBlank) {
             int[] neighboursLocs = new int[] { -1, 0, 0, -1, 0, 1, 1, 0};
 
@@ -61,8 +56,7 @@ public class Tile extends Pane {
                     Background temp = this.getBackground();
                     tile.isBlank = false;
                     tile.setBackground(temp);
-                    BackgroundFill backgroundFill = new BackgroundFill(Color.WHITE,
-                            CornerRadii.EMPTY, Insets.EMPTY);
+                    BackgroundFill backgroundFill = new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY);
                     Background background = new Background(backgroundFill);
                     this.setBackground(background);
                     this.isBlank = true;
@@ -78,7 +72,6 @@ public class Tile extends Pane {
     public Node getStyleableNode() {
         return null;
     }
-
 
     public boolean isOriginalBackground() {
         return originalBackground.equals(this.getBackground());

@@ -3,10 +3,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
@@ -14,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -23,12 +21,9 @@ import java.util.Random;
 
 public class Main extends Application {
 
-    static Stage mainStage;
-
-    static VBox mainLayout = new VBox();
-    static GridPane gridLayout;
-
-    static Image image = new Image("dolphin.png");
+    private static Stage mainStage;
+    private static VBox mainLayout = new VBox();
+    private static Image image = new Image("dolphin.png");
 
     static int numTiles = 9;
     static Tile[][] tiles;
@@ -36,8 +31,6 @@ public class Main extends Application {
     public static void main(String[] args){
         launch();
     }
-
-
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -72,7 +65,8 @@ public class Main extends Application {
         for(int i = 0; i < (int) Math.sqrt(numTiles); i++){
             for(int j = 0; j < (int) Math.sqrt(numTiles); j++){
                 PixelReader reader = image.getPixelReader();
-                WritableImage newImage = new WritableImage(reader, i*(480/(int) Math.sqrt(numTiles)),j*(480/(int) Math.sqrt(numTiles)),(480/(int) Math.sqrt(numTiles)),(480/(int) Math.sqrt(numTiles)));
+                int size = 480/(int) Math.sqrt(numTiles);
+                WritableImage newImage = new WritableImage(reader, i*size,j*size,size,size);
 
                 Tile tile;
 
@@ -86,7 +80,7 @@ public class Main extends Application {
             }
         }
 
-        gridLayout = new GridPane();
+        GridPane gridLayout = new GridPane();
         gridLayout.setHgap(1);
         gridLayout.setVgap(1);
 
@@ -105,6 +99,16 @@ public class Main extends Application {
         Menu fileMenu = new Menu("File");
 
         MenuItem aboutMenuItem = new MenuItem("About");
+        aboutMenuItem.setOnAction(event -> {
+            Alert aboutAlert = new Alert(Alert.AlertType.INFORMATION);
+            aboutAlert.setHeaderText("Sliding Puzzle");
+            aboutAlert.setContentText("Version 1.0.1\n" +
+                    "\n" +
+                    "Robert Sanders\n" +
+                    "\n" +
+                    "sanry030@mymail.unisa.edu.au");
+            aboutAlert.showAndWait();
+        });
 
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(event -> mainStage.close());
@@ -123,7 +127,7 @@ public class Main extends Application {
         customImageMenuItem.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Images", "*.jpg", "*.jpeg", "*.bmp", "*.png")
+                    new FileChooser.ExtensionFilter("Images", "*.gif", "*.jpg", "*.jpeg", "*.bmp", "*.png")
             );
             File selectedFile = fileChooser.showOpenDialog(mainStage);
             try {
@@ -144,7 +148,7 @@ public class Main extends Application {
         MenuItem mediumMenuItem = new MenuItem("Medium (4x4)");
         mediumMenuItem.setOnAction(actionEvent -> { numTiles = 16; refresh(); });
         MenuItem hardMenuItem = new MenuItem("Hard (5x5)");
-        hardMenuItem.setOnAction(actionEvent -> { numTiles = 20; refresh(); });
+        hardMenuItem.setOnAction(actionEvent -> { numTiles = 25; refresh(); });
         MenuItem insaneMenuItem = new MenuItem("Insane (8x8)");
         insaneMenuItem.setOnAction(actionEvent -> { numTiles = 64; refresh(); });
 
@@ -169,12 +173,16 @@ public class Main extends Application {
         }
     }
 
-    static void won(){
-        Alert win = new Alert(Alert.AlertType.CONFIRMATION);
+    private static void won(){
+        Alert win = new Alert(Alert.AlertType.INFORMATION);
         win.setTitle("Win!");
         win.setHeaderText("Congratulations!");
-        win.setContentText("You solved the puzzle. You are quite literally a genius! Get rekt!");
+        win.setContentText("You solved the puzzle. Why not try a harder picture or more tiles?");
         win.showAndWait();
-        refresh();
+        for(Node node : mainLayout.getChildren()){
+            if(node instanceof GridPane) {
+                node.setDisable(true);
+            }
+        }
     }
 }
