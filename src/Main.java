@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
@@ -42,7 +43,7 @@ public class Main extends Application {
         Scene mainScene = new Scene(mainLayout);
 
         mainStage.setScene(mainScene);
-        mainStage.setResizable(false);
+        mainStage.setResizable(true);
         mainStage.setTitle("Puzzle Slider");
         mainStage.show();
     }
@@ -154,7 +155,19 @@ public class Main extends Application {
 
         difficultyMenu.getItems().addAll(easyMenuItem,mediumMenuItem,hardMenuItem,insaneMenuItem);
 
-        menuBar.getMenus().addAll(fileMenu, imageMenu, difficultyMenu);
+        Menu hintMenu = new Menu("Hint");
+
+        ImageView hintImage = new ImageView(image);
+        hintImage.setPreserveRatio(true);
+        hintImage.setFitWidth(175);
+
+        MenuItem hintImageMenuItem = new MenuItem();
+
+        hintImageMenuItem.setGraphic(hintImage);
+
+        hintMenu.getItems().add(hintImageMenuItem);
+
+        menuBar.getMenus().addAll(fileMenu, imageMenu, difficultyMenu, hintMenu);
 
         return menuBar;
     }
