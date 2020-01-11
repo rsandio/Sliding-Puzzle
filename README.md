@@ -1,5 +1,5 @@
 # Sliding Puzzle
-Version 1.0.1
+Version 1.1.0
 
 Simple sliding puzzle game made using JavaFX.
 
@@ -14,6 +14,6 @@ Move the tiles to recreate the image by clicking on tiles adjacent to the blank 
 ![alt text](https://i.ibb.co/2cH68kX/screenshot.png "Difficulty selection")
 
 ## Planned Features
-* Hint to show completed picture
 * Program icon
 * Cody refactor + commenting
+* Keyboard controls
